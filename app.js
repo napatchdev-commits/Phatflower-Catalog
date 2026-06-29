@@ -85,26 +85,34 @@ async function loadCatalog() {
             // Filter catalog to show only wedding items (exclude eventType === 'ordination')
             state.catalog = (data.result.catalog || []).filter(item => item !== null && item.eventType !== 'ordination');
             
-            // Filter packages to show only wedding packages (exclude eventType === 'ordination' and ordination keywords)
+            // Filter packages to show only wedding packages safely
             const fetchedPkgs = (data.result.packages || []).filter(item => item !== null);
-            const weddingPkgs = fetchedPkgs.filter(pkg => 
-                pkg.eventType !== 'ordination' &&
-                !pkg.name.includes("บวช") && 
-                !pkg.name.includes("นาค") && 
-                !pkg.name.includes("พระ") &&
-                !(pkg.items && JSON.stringify(pkg.items).includes("นาค"))
-            );
+            const weddingPkgs = fetchedPkgs.filter(pkg => {
+                const name = pkg.name || "";
+                const eventType = pkg.eventType || "wedding";
+                const itemsStr = pkg.items ? JSON.stringify(pkg.items) : "";
+                
+                return eventType === "wedding" &&
+                    !name.includes("บวช") && 
+                    !name.includes("นาค") && 
+                    !name.includes("พระ") &&
+                    !itemsStr.includes("นาค");
+            });
             state.packages = weddingPkgs.length > 0 ? weddingPkgs : DEFAULT_PACKAGES;
             
-            // Filter promotions to show only wedding promotions (exclude eventType === 'ordination' and ordination keywords)
+            // Filter promotions to show only wedding promotions safely
             const fetchedPromos = (data.result.promotions || []).filter(item => item !== null);
-            const weddingPromos = fetchedPromos.filter(promo => 
-                promo.eventType !== 'ordination' &&
-                !promo.title.includes("บวช") && 
-                !promo.description.includes("บวช") &&
-                !promo.title.includes("นาค") &&
-                !promo.description.includes("นาค")
-            );
+            const weddingPromos = fetchedPromos.filter(promo => {
+                const title = promo.title || "";
+                const description = promo.description || "";
+                const eventType = promo.eventType || "wedding";
+                
+                return eventType === "wedding" &&
+                    !title.includes("บวช") && 
+                    !description.includes("บวช") &&
+                    !title.includes("นาค") &&
+                    !description.includes("นาค");
+            });
             state.promotions = weddingPromos.length > 0 ? weddingPromos : DEFAULT_PROMOTIONS;
             
             console.log("Loaded dynamic database from Google Sheets filtered for Wedding.");
