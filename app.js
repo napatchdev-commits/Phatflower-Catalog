@@ -82,15 +82,30 @@ async function loadCatalog() {
         const data = await response.json();
         
         if (data && data.status === 'success' && data.result) {
-            state.catalog = (data.result.catalog || []).filter(item => item !== null);
+            // Filter catalog to show only wedding items (exclude eventType === 'ordination')
+            state.catalog = (data.result.catalog || []).filter(item => item !== null && item.eventType !== 'ordination');
             
+            // Filter packages to show only wedding packages (exclude ordination keywords)
             const fetchedPkgs = (data.result.packages || []).filter(item => item !== null);
-            state.packages = fetchedPkgs.length > 0 ? fetchedPkgs : DEFAULT_PACKAGES;
+            const weddingPkgs = fetchedPkgs.filter(pkg => 
+                !pkg.name.includes("บวช") && 
+                !pkg.name.includes("นาค") && 
+                !pkg.name.includes("พระ") &&
+                !(pkg.items && JSON.stringify(pkg.items).includes("นาค"))
+            );
+            state.packages = weddingPkgs.length > 0 ? weddingPkgs : DEFAULT_PACKAGES;
             
+            // Filter promotions to show only wedding promotions (exclude ordination keywords)
             const fetchedPromos = (data.result.promotions || []).filter(item => item !== null);
-            state.promotions = fetchedPromos.length > 0 ? fetchedPromos : DEFAULT_PROMOTIONS;
+            const weddingPromos = fetchedPromos.filter(promo => 
+                !promo.title.includes("บวช") && 
+                !promo.description.includes("บวช") &&
+                !promo.title.includes("นาค") &&
+                !promo.description.includes("นาค")
+            );
+            state.promotions = weddingPromos.length > 0 ? weddingPromos : DEFAULT_PROMOTIONS;
             
-            console.log("Loaded dynamic database from Google Sheets.");
+            console.log("Loaded dynamic database from Google Sheets filtered for Wedding.");
         } else {
             console.warn("API returned invalid data, using default structures:", data);
             state.catalog = DEFAULT_CATALOG;
