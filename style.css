@@ -1108,13 +1108,13 @@ header p {
         margin-bottom: 6px;
     }
     .section-title {
-        font-size: 1.2rem;
+        font-size: 1.15rem;
         margin-bottom: 16px;
         padding-bottom: 6px;
     }
     
-    /* Horizontal Swipeable row for Promotions and Preset Packages */
-    .promo-container, .packages-grid {
+    /* Preset Packages swipe list */
+    .packages-grid {
         display: flex !important;
         overflow-x: auto !important;
         scroll-snap-type: x mandatory;
@@ -1128,15 +1128,8 @@ header p {
         scrollbar-width: none;
     }
     
-    .promo-container::-webkit-scrollbar, .packages-grid::-webkit-scrollbar {
+    .packages-grid::-webkit-scrollbar {
         display: none;
-    }
-    
-    .promo-card {
-        flex: 0 0 85%;
-        scroll-snap-align: start;
-        border-radius: var(--radius-md);
-        box-shadow: var(--shadow-md);
     }
     
     .package-card {
@@ -1167,10 +1160,10 @@ header p {
 /* Compact Mobile Devices (max-width: 576px) */
 @media (max-width: 576px) {
     header {
-        padding: 24px 12px;
+        padding: 20px 12px;
     }
     header h1 {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
     }
     header p {
         font-size: 0.8rem;
@@ -1186,36 +1179,70 @@ header p {
     }
     
     .section-title {
-        font-size: 1.1rem;
+        font-size: 1.02rem !important; /* Slightly smaller, cleaner titles */
         border-bottom-width: 1.5px;
     }
     
-    /* Category Filter pills */
+    /* Vertical stacked promotions for easy reading */
+    .promo-container {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+        overflow-x: visible !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    
+    .promo-card {
+        flex: none !important;
+        width: 100% !important;
+        border-radius: var(--radius-sm);
+        box-shadow: var(--shadow-sm);
+        padding: 14px 16px;
+    }
+    
+    .promo-content h4 {
+        font-size: 0.95rem;
+    }
+    .promo-content p {
+        font-size: 0.82rem;
+    }
+    
+    /* Category Filter pills WRAPPED into multiple rows so all are visible at once */
     .category-filter {
+        display: flex !important;
+        flex-wrap: wrap !important; /* Wrap instead of horizontal scroll */
         margin-bottom: 18px;
-        gap: 6px;
-        padding-bottom: 6px;
+        gap: 8px !important;
+        overflow-x: visible !important;
+        padding-bottom: 0;
     }
     
     .category-btn {
-        padding: 5px 12px;
-        font-size: 0.8rem;
+        padding: 6px 12px !important;
+        font-size: 0.8rem !important;
+        border-radius: 20px;
     }
     
     /* Text-Centric Single-Column Catalog List (Menu Style) */
     .catalog-grid {
-        grid-template-columns: 1fr !important; /* Force 1 column */
-        gap: 10px !important;
+        grid-template-columns: 1fr !important; /* Force 1 column list view */
+        gap: 12px !important;
     }
     
     .item-card {
-        border-radius: var(--radius-sm);
+        border-radius: var(--radius-md);
         border: 1px solid var(--gray-200);
         border-left: 4px solid var(--primary) !important; /* Left accent bar */
-        box-shadow: 0 2px 6px rgba(30, 41, 59, 0.03);
-        padding: 28px 12px 12px 12px !important; /* Top padding for absolute badge */
+        box-shadow: 0 2px 8px rgba(30, 41, 59, 0.04);
+        padding: 32px 16px 16px 16px !important; /* Top padding for absolute badge */
         position: relative !important;
-        display: block !important;
+        display: flex !important;
+        flex-direction: column !important; /* Standard robust vertical layout to avoid overlapping */
+        background-color: var(--white);
+        min-height: auto !important;
     }
     
     .item-image-placeholder {
@@ -1224,63 +1251,70 @@ header p {
     
     .item-badge {
         position: absolute !important;
-        top: 8px !important;
-        left: 12px !important;
+        top: 10px !important;
+        left: 16px !important;
         right: auto !important;
         display: inline-flex !important;
-        font-size: 0.65rem;
-        padding: 2px 6px;
-        border-radius: 4px;
-        z-index: 10;
+        font-size: 0.68rem !important;
+        padding: 3px 8px !important;
+        border-radius: 4px !important;
+        z-index: 2 !important;
     }
     
     .item-details {
-        display: grid !important;
-        grid-template-columns: 1fr auto !important;
-        grid-template-rows: auto auto !important;
-        gap: 6px 12px !important;
+        display: flex !important;
+        flex-direction: column !important; /* Vertical layout */
+        gap: 10px !important;
         width: 100% !important;
         padding: 0 !important;
-        align-items: center !important;
     }
     
     .item-title {
-        grid-column: 1 !important;
-        grid-row: 1 / span 2 !important;
-        font-size: 0.92rem !important;
-        min-height: 0 !important;
+        font-size: 1.02rem !important; /* Bold, highly readable title */
+        min-height: auto !important;
         margin: 0 !important;
-        line-height: 1.4;
-        color: var(--dark);
-        font-weight: 600;
-        display: flex;
-        align-items: center;
+        line-height: 1.4 !important;
+        color: var(--dark) !important;
+        font-weight: 600 !important;
+        display: block !important;
     }
     
     .item-price {
-        grid-column: 2 !important;
-        grid-row: 1 !important;
-        font-size: 1.05rem !important;
+        font-size: 1.1rem !important; /* Large highlighted price */
         margin: 0 !important;
-        text-align: right !important;
-        justify-content: flex-end !important;
-        font-weight: 700;
+        font-weight: 700 !important;
+        color: var(--secondary) !important;
+        display: flex !important;
+        align-items: baseline !important;
+        gap: 4px !important;
     }
     
     .item-price span {
-        font-size: 0.75rem;
+        font-size: 0.8rem !important;
+        color: var(--gray-400) !important;
+        font-weight: 400 !important;
     }
     
     .btn-add {
-        grid-column: 2 !important;
-        grid-row: 2 !important;
-        width: fit-content !important;
-        padding: 6px 12px !important;
-        font-size: 0.8rem !important;
-        border-radius: 6px !important;
-        gap: 4px !important;
-        border-width: 1px;
-        margin: 0 !important;
+        width: 100% !important; /* Full width touch-friendly button */
+        padding: 10px 16px !important;
+        font-size: 0.9rem !important;
+        font-weight: 600 !important;
+        border-radius: 8px !important;
+        background-color: var(--white) !important;
+        color: var(--primary) !important;
+        border: 1.5px solid var(--primary) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        margin-top: 4px !important;
+        transition: var(--transition) !important;
+    }
+    
+    .btn-add:active {
+        background-color: var(--primary) !important;
+        color: var(--white) !important;
     }
     
     /* Play Store style Compact Preset Packages */
