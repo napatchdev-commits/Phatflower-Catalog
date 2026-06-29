@@ -1005,164 +1005,298 @@ header p {
 
 /* Mobile and Tablet Responsiveness Updates */
 
-/* Tablet and Smaller Devices (max-width: 768px) */
-@media (max-width: 768px) {
-    header {
-        padding: 40px 16px;
-    }
-    header h1 {
-        font-size: 2rem;
-    }
-    header p {
-        font-size: 0.95rem;
-    }
+/* Tablet and Smaller Devices (max-width: 1024px) */
+@media (max-width: 1024px) {
     .container {
         margin: 20px auto;
         padding: 0 16px;
+        grid-template-columns: 1fr;
         gap: 20px;
     }
-    .section-title {
-        font-size: 1.3rem;
-        margin-bottom: 15px;
-        padding-bottom: 6px;
+    
+    .mobile-summary-bar {
+        display: flex;
+        position: fixed;
+        bottom: 16px;
+        left: 12px;
+        right: 12px;
+        border-radius: 16px;
+        background-color: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 8px 30px rgba(30, 41, 59, 0.15);
+        padding: 12px 18px;
+        z-index: 999;
+        transition: var(--transition);
     }
-    .category-filter {
-        margin-bottom: 20px;
-        gap: 8px;
+    
+    .builder-panel {
+        display: none;
     }
-    .category-btn {
-        padding: 6px 14px;
+    
+    .builder-panel.mobile-active {
+        display: flex;
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1001;
+        max-height: 78vh;
+        border-radius: 24px 24px 0 0;
+        box-shadow: 0 -10px 40px rgba(30, 41, 59, 0.2);
+        padding: 24px 20px 30px 20px;
+        background-color: var(--white);
+        border: none;
+        border-top: 1px solid var(--gray-100);
+        animation: slideUp 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* Drag handle indicator for iOS-style bottom sheet */
+    .builder-panel.mobile-active::before {
+        content: '';
+        display: block;
+        width: 44px;
+        height: 5px;
+        background-color: var(--gray-200);
+        border-radius: 3px;
+        margin: -12px auto 18px auto;
+    }
+    
+    .cart-items-list {
+        max-height: 38vh;
+        padding-right: 2px;
+    }
+    
+    .cart-item {
+        padding: 12px 0;
+    }
+    
+    .cart-item-title {
+        font-size: 0.95rem;
+    }
+    
+    .qty-btn {
+        width: 28px;
+        height: 28px;
         font-size: 0.85rem;
-    }
-    .promo-card {
-        padding: 16px;
-    }
-    .promo-content h4 {
-        font-size: 1rem;
-    }
-    .promo-content p {
-        font-size: 0.85rem;
-    }
-    .packages-grid {
-        gap: 16px;
-    }
-    .package-header {
-        padding: 16px;
-    }
-    .package-body {
-        padding: 16px;
-        gap: 16px;
-    }
-    .package-price {
-        font-size: 1.75rem;
     }
 }
 
-/* Mobile Devices (max-width: 576px) */
-@media (max-width: 576px) {
+/* Mobile Devices (max-width: 768px) */
+@media (max-width: 768px) {
     header {
-        padding: 30px 12px;
+        padding: 30px 16px;
     }
     header h1 {
-        font-size: 1.7rem;
+        font-size: 1.8rem;
     }
     header p {
         font-size: 0.85rem;
+        line-height: 1.4;
     }
     .logo-icon {
         font-size: 2.2rem;
-        margin-bottom: 8px;
-    }
-    .container {
-        margin: 12px auto;
-        padding: 0 12px;
+        margin-bottom: 6px;
     }
     .section-title {
-        font-size: 1.15rem;
+        font-size: 1.2rem;
+        margin-bottom: 16px;
+        padding-bottom: 6px;
     }
     
-    /* Display Catalog Cards in a beautiful, space-saving 2-column grid on mobile */
-    .catalog-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-    }
-    .item-card {
-        border-radius: var(--radius-sm);
-    }
-    .item-badge {
-        top: 8px;
-        right: 8px;
-        font-size: 0.65rem;
-        padding: 2px 6px;
-    }
-    .item-image-placeholder {
-        height: 110px;
-        font-size: 1.8rem;
-    }
-    .item-details {
-        padding: 10px;
-    }
-    .item-title {
-        font-size: 0.85rem;
-        min-height: 36px;
-        margin-bottom: 4px;
-        line-height: 1.3;
-    }
-    .item-price {
-        font-size: 0.95rem;
-        margin-bottom: 8px;
-        gap: 2px;
-    }
-    .item-price span {
-        font-size: 0.7rem;
-    }
-    .btn-add {
-        padding: 6px 8px;
-        font-size: 0.75rem;
-        border-radius: 6px;
-        gap: 4px;
+    /* Horizontal Swipeable row for Promotions and Preset Packages */
+    .promo-container, .packages-grid {
+        display: flex !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory;
+        gap: 16px;
+        padding: 4px 4px 16px 4px;
+        margin-left: -16px;
+        margin-right: -16px;
+        padding-left: 16px;
+        padding-right: 16px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
     }
     
-    /* Preset Packages */
-    .packages-grid {
-        grid-template-columns: 1fr;
+    .promo-container::-webkit-scrollbar, .packages-grid::-webkit-scrollbar {
+        display: none;
     }
     
-    /* Modal / Form styling for compact mobile screens */
-    .modal {
-        padding: 10px;
+    .promo-card {
+        flex: 0 0 85%;
+        scroll-snap-align: start;
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-md);
     }
-    .modal-content {
-        border-radius: var(--radius-sm);
+    
+    .package-card {
+        flex: 0 0 82%;
+        scroll-snap-align: start;
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-md);
     }
-    .modal-header {
-        padding: 12px 16px;
+    
+    .package-card.highlighted {
+        transform: none;
     }
-    .modal-title {
-        font-size: 1.05rem;
+    
+    .package-header {
+        padding: 20px 16px;
     }
-    .modal-body {
-        padding: 16px;
-        gap: 12px;
+    
+    .package-body {
+        padding: 20px 16px;
+        gap: 16px;
     }
-    .form-group label {
+    
+    .package-price {
+        font-size: 1.6rem;
+    }
+}
+
+/* Compact Mobile Devices (max-width: 576px) */
+@media (max-width: 576px) {
+    header {
+        padding: 24px 12px;
+    }
+    header h1 {
+        font-size: 1.5rem;
+    }
+    header p {
         font-size: 0.8rem;
     }
-    .form-group input, .form-group textarea {
-        font-size: 0.85rem;
-        padding: 8px 12px;
-    }
-    .btn-primary {
-        padding: 10px 16px;
-        font-size: 0.9rem;
+    .logo-icon {
+        font-size: 1.8rem;
+        margin-bottom: 4px;
     }
     
-    /* Mobile Drawer */
-    .builder-panel.mobile-active {
-        padding: 16px;
-        border-radius: var(--radius-md) var(--radius-md) 0 0;
+    .container {
+        margin: 15px auto;
+        padding: 0 12px;
     }
-    .cart-items-list {
-        max-height: 220px;
+    
+    .section-title {
+        font-size: 1.1rem;
+        border-bottom-width: 1.5px;
+    }
+    
+    /* Category Filter pills */
+    .category-filter {
+        margin-bottom: 18px;
+        gap: 6px;
+        padding-bottom: 6px;
+    }
+    
+    .category-btn {
+        padding: 5px 12px;
+        font-size: 0.8rem;
+    }
+    
+    /* Text-Centric 2-Column Catalog Cards */
+    .catalog-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .item-card {
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--gray-200);
+        border-left: 3px solid var(--primary) !important; /* Left accent bar */
+        box-shadow: 0 2px 6px rgba(30, 41, 59, 0.03);
+        padding-top: 10px;
+    }
+    
+    .item-image-placeholder {
+        display: none !important; /* Hide giant empty box */
+    }
+    
+    .item-badge {
+        position: relative !important;
+        top: 0 !important;
+        right: 0 !important;
+        display: inline-flex;
+        align-self: flex-start;
+        margin-left: 12px;
+        margin-bottom: 6px;
+        font-size: 0.65rem;
+        padding: 2px 6px;
+        border-radius: 4px;
+    }
+    
+    .item-details {
+        padding: 0 12px 12px 12px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+    
+    .item-title {
+        font-size: 0.9rem;
+        min-height: 48px; /* Force 3 lines alignment */
+        margin-bottom: 6px;
+        line-height: 1.35;
+        color: var(--dark);
+    }
+    
+    .item-price {
+        font-size: 1.05rem;
+        margin-bottom: 10px;
+        gap: 2px;
+    }
+    
+    .item-price span {
+        font-size: 0.75rem;
+    }
+    
+    .btn-add {
+        padding: 8px 10px;
+        font-size: 0.8rem;
+        border-radius: 6px;
+        gap: 6px;
+        border-width: 1px;
+    }
+    
+    /* Request Form Modal tuning */
+    .modal {
+        padding: 12px;
+    }
+    
+    .modal-content {
+        border-radius: var(--radius-md);
+    }
+    
+    .modal-header {
+        padding: 16px;
+    }
+    
+    .modal-title {
+        font-size: 1.1rem;
+    }
+    
+    .modal-body {
+        padding: 18px;
+        gap: 12px;
+    }
+    
+    .form-group label {
+        font-size: 0.85rem;
+        margin-bottom: 2px;
+    }
+    
+    /* 16px font-size prevents auto-zoom on iOS Safari when tapping inputs */
+    .form-group input, 
+    .form-group textarea {
+        font-size: 16px !important;
+        padding: 8px 12px;
+        border-radius: 6px;
+    }
+    
+    .btn-primary {
+        padding: 12px 16px;
+        font-size: 0.95rem;
+        border-radius: 8px;
     }
 }
