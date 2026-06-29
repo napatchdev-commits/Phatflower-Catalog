@@ -115,7 +115,7 @@ header p {
 
 @media (max-width: 1024px) {
     .container {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 }
 
@@ -1017,7 +1017,7 @@ header p {
     .container {
         margin: 20px auto;
         padding: 0 16px;
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         gap: 20px;
     }
     
