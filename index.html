@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhatFlowers Catalog & Calculator - เลือกจัดเซ็ตแพ็กเกจงานแต่ง</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header>
+        <div class="header-container">
+            <div class="logo-icon">
+                <i class="fa-solid fa-seedling"></i>
+            </div>
+            <h1>PhatFlowers</h1>
+            <p>เลือกดีไซน์และออกแบบเซ็ตดอกไม้สำหรับงานแต่งงาน งานบวช และพิธีมงคลต่างๆ คำนวณราคางบประมาณการจัดงานเบื้องต้นได้ทันที</p>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Left Side: Catalog -->
+        <div>
+            <!-- SECTION: Promotions (โปรโมชันพิเศษ - เรนเดอร์ไดนามิก) -->
+            <div id="promotions-section-wrapper" style="display: none;">
+                <div class="section-title">
+                    <i class="fa-solid fa-gift"></i>
+                    <span>โปรโมชันพิเศษช่วงนี้ (Special Promotions)</span>
+                </div>
+                <div class="promo-container" id="promotions-container" style="margin-bottom: 30px;">
+                    <!-- Rendered dynamically from app.js -->
+                </div>
+            </div>
+
+            <!-- SECTION: Popular Packages (แพ็กเกจจัดงานสำเร็จรูป - เรนเดอร์ไดนามิก) -->
+            <div id="packages-section-wrapper" style="display: none;">
+                <div class="section-title">
+                    <i class="fa-solid fa-cubes"></i>
+                    <span>แพ็กเกจจัดงานสำเร็จรูป (Popular Packages)</span>
+                </div>
+                <div class="packages-grid" id="packages-container" style="margin-bottom: 40px;">
+                    <!-- Rendered dynamically from app.js -->
+                </div>
+            </div>
+
+            <div class="section-title">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span>เลือกรายการบริการ / สินค้า เพิ่มเติม</span>
+            </div>
+            
+            <!-- Category Filters -->
+            <div class="category-filter" id="category-filter">
+                <button class="category-btn active" onclick="setCategory('all')">ทั้งหมด</button>
+            </div>
+            
+            <!-- Catalog Cards Grid -->
+            <div class="catalog-grid" id="catalog-grid">
+                <!-- Javascript will load items here -->
+            </div>
+        </div>
+
+        <!-- Right Side: Sticky Package Builder (Desktop) -->
+        <aside class="builder-panel" id="builder-panel">
+            <div class="panel-header">
+                <span class="panel-title">
+                    <i class="fa-solid fa-basket-shopping" style="color: var(--primary); margin-right: 6px;"></i> แพ็กเกจของคุณ
+                </span>
+                <button class="clear-btn" onclick="clearPackage()">ล้างทั้งหมด</button>
+            </div>
+            
+            <!-- Selected Items List -->
+            <div class="cart-items-list" id="cart-items-list">
+                <!-- Javascript will load list here -->
+            </div>
+            
+            <!-- Summary Calculations -->
+            <div class="summary-box">
+                <div class="summary-row">
+                    <span>ราคารวมสินค้า</span>
+                    <span><span id="summary-subtotal">0</span> บาท</span>
+                </div>
+                <div class="summary-row" style="font-size: 0.85rem; color: var(--gray-400); margin-top: -4px;">
+                    <span>* ราคาประเมินเบื้องต้น ไม่รวมค่าจัดส่งติดตั้ง</span>
+                </div>
+                <div class="summary-row total">
+                    <span>ราคาสุทธิ</span>
+                    <span><span id="summary-total">0</span> บาท</span>
+                </div>
+            </div>
+            
+            <!-- Checkout Action Button -->
+            <button class="btn-primary" id="btn-checkout" onclick="toggleRequestModal(true)" disabled>
+                <i class="fa-regular fa-paper-plane"></i> ส่งข้อมูลความสนใจจัดงาน
+            </button>
+        </aside>
+    </div>
+
+    <!-- Mobile Sticky Bottom Bar (Visible on Mobile only) -->
+    <div class="mobile-summary-bar">
+        <div class="mobile-total-info">
+            <span class="mobile-total-label">ประมาณการยอดรวม</span>
+            <span class="mobile-total-val"><span id="mobile-total">0</span> บาท</span>
+        </div>
+        <button class="btn-primary" id="mobile-checkout-btn" onclick="toggleMobileDrawer(true)" disabled style="padding: 10px 18px; font-size: 0.9rem; margin-top: 0; box-shadow: none;">
+            <i class="fa-solid fa-basket-shopping"></i> ดูแพ็กเกจ
+        </button>
+    </div>
+
+    <!-- Mobile Drawer Overlay -->
+    <div class="drawer-overlay" id="drawer-overlay"></div>
+
+    <!-- Modal Form (Customer Request Form) -->
+    <div class="modal" id="request-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">กรอกข้อมูลความสนใจจัดงาน</span>
+                <button class="close-modal-btn" onclick="toggleRequestModal(false)"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="quote-request-form" onsubmit="submitQuoteRequest(event)">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="req-name">ชื่อ - นามสกุล ผู้ติดต่อ *</label>
+                        <input type="text" id="req-name" required placeholder="เช่น คุณสมชาย รักดี">
+                    </div>
+                    <div class="form-group">
+                        <label for="req-phone">เบอร์โทรศัพท์ติดต่อกลับ (ถ้ามี)</label>
+                        <input type="tel" id="req-phone" pattern="[0-9]{9,10}" placeholder="เช่น 0891234567">
+                    </div>
+                    <div class="form-group">
+                        <label for="req-date">วันที่จัดงาน (ถ้ามี)</label>
+                        <input type="date" id="req-date">
+                    </div>
+                    <div class="form-group">
+                        <label for="req-location">สถานที่จัดงาน / ที่อยู่จัดงาน *</label>
+                        <textarea id="req-location" required placeholder="กรอกข้อมูลสถานที่จัดงาน เช่น โรงแรมกรุงเทพ แกรนด์ ฮอลล์ ชั้น 2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="req-notes">หมายเหตุเพิ่มเติม (ถ้ามี)</label>
+                        <textarea id="req-notes" placeholder="ระบุรายละเอียด ดีไซน์ หรือเฉดสีดอกไม้ที่ต้องการเน้น เช่น โทนพาสเทล ชมพู-ขาว"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary" id="btn-submit-request" style="margin-top: 10px;">
+                        <i class="fa-regular fa-paper-plane"></i> ส่งข้อมูลความสนใจให้พนักงาน
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script src="app.js" defer></script>
+</body>
+</html>
