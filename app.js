@@ -85,9 +85,10 @@ async function loadCatalog() {
             // Filter catalog to show only wedding items (exclude eventType === 'ordination')
             state.catalog = (data.result.catalog || []).filter(item => item !== null && item.eventType !== 'ordination');
             
-            // Filter packages to show only wedding packages (exclude ordination keywords)
+            // Filter packages to show only wedding packages (exclude eventType === 'ordination' and ordination keywords)
             const fetchedPkgs = (data.result.packages || []).filter(item => item !== null);
             const weddingPkgs = fetchedPkgs.filter(pkg => 
+                pkg.eventType !== 'ordination' &&
                 !pkg.name.includes("บวช") && 
                 !pkg.name.includes("นาค") && 
                 !pkg.name.includes("พระ") &&
@@ -95,9 +96,10 @@ async function loadCatalog() {
             );
             state.packages = weddingPkgs.length > 0 ? weddingPkgs : DEFAULT_PACKAGES;
             
-            // Filter promotions to show only wedding promotions (exclude ordination keywords)
+            // Filter promotions to show only wedding promotions (exclude eventType === 'ordination' and ordination keywords)
             const fetchedPromos = (data.result.promotions || []).filter(item => item !== null);
             const weddingPromos = fetchedPromos.filter(promo => 
+                promo.eventType !== 'ordination' &&
                 !promo.title.includes("บวช") && 
                 !promo.description.includes("บวช") &&
                 !promo.title.includes("นาค") &&
