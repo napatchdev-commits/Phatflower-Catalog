@@ -398,6 +398,11 @@ function toggleRequestModal(show) {
         document.getElementById('req-date').min = `${yyyy}-${mm}-${dd}`;
         
         modal.classList.add('active');
+        
+        // On mobile, close the slide-up drawer to prevent it from covering the modal
+        if (typeof toggleMobileDrawer === 'function') {
+            toggleMobileDrawer(false);
+        }
     } else {
         modal.classList.remove('active');
     }
