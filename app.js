@@ -213,7 +213,7 @@ function renderCatalog() {
                 </div>
                 <div class="item-details">
                     <h3 class="item-title">${item.description}</h3>
-                    <div class="item-price">
+                    <div class="item-price" style="display: none;">
                         ${item.unitPrice > 0 ? `${formatCurrency(item.unitPrice)} <span>บาท</span>` : `<span>สอบถามราคา (ประเมินตามหน้างาน)</span>`}
                     </div>
                     <button class="btn-add" onclick="addToPackage('${item.id}')">
@@ -342,7 +342,7 @@ function updateSummary() {
             <div class="cart-item">
                 <div class="cart-item-info">
                     <div class="cart-item-title">${entry.item.description}</div>
-                    <div class="cart-item-price">${priceDisplay}</div>
+                    <div class="cart-item-price" style="display: none;">${priceDisplay}</div>
                 </div>
                 <div class="cart-item-controls">
                     <button class="qty-btn" onclick="removeFromPackage('${entry.item.id}')">-</button>
@@ -510,22 +510,43 @@ async function submitQuoteRequest(event) {
 // Render Success Screen inside Modal Content
 function renderSuccessScreen(requestId, name, total) {
     const modalContent = document.querySelector('#request-modal .modal-content');
-    const totalText = total > 0 ? `ยอดประเมินเริ่มต้น: ${formatCurrency(total)} บาท` : `แจ้งราคาประเมินภายหลัง`;
+    const formattedTotal = total > 0 ? `${formatCurrency(total)} บาท` : 'ประเมินราคาตามหน้างาน';
     modalContent.innerHTML = `
         <div class="modal-header">
-            <span class="modal-title">ส่งข้อมูลความสนใจเรียบร้อย</span>
+            <span class="modal-title">ส่งข้อมูลสำเร็จ!</span>
             <button class="close-modal-btn" onclick="closeSuccessAndReload()"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div class="modal-body success-screen">
-            <i class="fa-regular fa-circle-check success-icon"></i>
-            <h3>ส่งข้อมูลให้พนักงานสำเร็จ!</h3>
-            <p>ระบบได้ทำการบันทึกข้อมูลความสนใจในการจัดงานแต่ง/จัดงานของคุณเรียบร้อยแล้ว พนักงานจะรีบติดต่อกลับเพื่อเสนอราคาและรายละเอียดโดยเร็วที่สุด</p>
-            <div class="req-id-badge">${requestId}</div>
-            <p style="font-size: 0.85rem; color: var(--secondary); font-weight: 500;">
-                คุณ: ${name} <br> ${totalText}
+        <div class="modal-body success-screen" style="padding: 24px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 16px;">
+            <div class="success-icon-wrapper" style="width: 60px; height: 60px; border-radius: 50%; background-color: rgba(45, 106, 79, 0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 4px;">
+                <i class="fa-solid fa-circle-check" style="font-size: 2.2rem; color: var(--primary);"></i>
+            </div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--dark); margin: 0;">คำนวณราคาประเมินเสร็จสิ้น</h3>
+            <p style="font-size: 0.88rem; color: var(--gray-400); line-height: 1.5; margin: 0; padding: 0 10px;">
+                ระบบได้ส่งข้อมูลความสนใจจัดงานของคุณไปยังพนักงานเรียบร้อยแล้ว และนี่คือใบเสนอราคาประเมินเบื้องต้นของคุณ:
             </p>
-            <button class="btn-primary" onclick="closeSuccessAndReload()" style="margin-top: 15px; width: 100%;">
-                ตกลง / กลับหน้าเว็บหลัก
+            
+            <!-- Beautiful Receipt Card -->
+            <div class="quote-receipt-card" style="width: 100%; background: var(--gray-50); border: 1.5px dashed var(--gray-200); border-radius: 12px; padding: 18px; text-align: left; display: flex; flex-direction: column; gap: 12px; box-sizing: border-box;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--gray-200); padding-bottom: 8px;">
+                    <span style="font-size: 0.8rem; color: var(--gray-400); font-weight: 500;">รหัสอ้างอิงใบเสนอราคา</span>
+                    <span style="font-size: 0.85rem; color: var(--dark); font-weight: 600; font-family: monospace;">${requestId}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.85rem; color: var(--gray-400);">ชื่อลูกค้า</span>
+                    <span style="font-size: 0.88rem; color: var(--dark); font-weight: 600;">คุณ${name}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed var(--gray-200); padding-top: 10px; margin-top: 4px;">
+                    <span style="font-size: 0.9rem; color: var(--dark); font-weight: 600;">ราคาประเมินอัตโนมัติ</span>
+                    <span style="font-size: 1.25rem; color: var(--primary); font-weight: 700;">${formattedTotal}</span>
+                </div>
+            </div>
+            
+            <p style="font-size: 0.82rem; color: var(--primary); font-weight: 500; line-height: 1.45; margin: 0; background-color: rgba(45, 106, 79, 0.05); padding: 8px 16px; border-radius: 8px; width: 100%; box-sizing: border-box;">
+                <i class="fa-solid fa-circle-info" style="margin-right: 6px;"></i> พนักงานจะติดต่อกลับทางโทรศัพท์เพื่อยืนยันวันจัดงาน รายละเอียด ดอกไม้ และคิวงานอีกครั้งค่ะ
+            </p>
+            
+            <button class="btn-primary" onclick="closeSuccessAndReload()" style="width: 100%; padding: 12px 16px; font-size: 0.95rem; border-radius: 8px; margin-top: 4px; box-sizing: border-box;">
+                ตกลง / กลับไปดูสินค้าใหม่
             </button>
         </div>
     `;
@@ -655,21 +676,12 @@ function renderPackages() {
             itemsHtml = list.map(item => `<li><i class="fa-solid fa-circle-check"></i> ${item}</li>`).join('');
         }
 
-        const priceText = pkg.price > 0 
-            ? `${formatCurrency(pkg.price)} <span>บาท</span>` 
-            : `0 <span>บาท</span>`;
-            
-        const priceNote = pkg.price > 0 
-            ? '' 
-            : `<div style="font-size: 0.8rem; color: var(--gray-400); margin-top: -4px;">* ประเมินราคาพิเศษตามหน้างาน (สอบถามราคา)</div>`;
-
         return `
             <div class="package-card ${highlightClass}">
                 <div class="package-header">
                     ${pkg.badge ? `<span class="package-badge ${badgeClass}">${pkg.badge}</span>` : ''}
                     <h3>${pkg.name || ""}</h3>
-                    <div class="package-price">${priceText}</div>
-                    ${priceNote}
+                    <div class="package-price" style="font-size: 0.9rem; font-weight: 600; color: var(--primary);">ประเมินราคาอัตโนมัติเมื่อส่งข้อมูล</div>
                 </div>
                 <div class="package-body">
                     <ul>

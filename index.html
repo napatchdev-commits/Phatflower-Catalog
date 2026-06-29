@@ -87,17 +87,11 @@
             
             <!-- Summary Calculations -->
             <div class="summary-box">
-                <div class="summary-row">
-                    <span>ราคารวมสินค้า</span>
-                    <span><span id="summary-subtotal">0</span> บาท</span>
+                <div class="summary-row" style="font-size: 0.9rem; text-align: center; color: var(--primary); font-weight: 600; display: block; border-bottom: none; padding-bottom: 0; line-height: 1.4;">
+                    <i class="fa-solid fa-calculator" style="margin-right: 6px;"></i> ระบบจะประเมินราคาประเมินเบื้องต้นอัตโนมัติให้คุณทันทีหลังกดส่งข้อมูลความสนใจจัดงาน
                 </div>
-                <div class="summary-row" style="font-size: 0.85rem; color: var(--gray-400); margin-top: -4px;">
-                    <span>* ราคาประเมินเบื้องต้น ไม่รวมค่าจัดส่งติดตั้ง</span>
-                </div>
-                <div class="summary-row total">
-                    <span>ราคาสุทธิ</span>
-                    <span><span id="summary-total">0</span> บาท</span>
-                </div>
+                <span id="summary-subtotal" style="display: none;">0</span>
+                <span id="summary-total" style="display: none;">0</span>
             </div>
             
             <!-- Checkout Action Button -->
@@ -110,8 +104,9 @@
     <!-- Mobile Sticky Bottom Bar (Visible on Mobile only) -->
     <div class="mobile-summary-bar">
         <div class="mobile-total-info">
-            <span class="mobile-total-label">ประมาณการยอดรวม</span>
-            <span class="mobile-total-val"><span id="mobile-total">0</span> บาท</span>
+            <span class="mobile-total-label">ระบบประเมินราคา</span>
+            <span class="mobile-total-val" style="font-size: 0.85rem; color: var(--primary); font-weight: 600;">หลังกดส่งข้อมูล</span>
+            <span id="mobile-total" style="display: none;">0</span>
         </div>
         <button class="btn-primary" id="mobile-checkout-btn" onclick="toggleMobileDrawer(true)" disabled style="padding: 10px 18px; font-size: 0.9rem; margin-top: 0; box-shadow: none;">
             <i class="fa-solid fa-basket-shopping"></i> ดูแพ็กเกจ
@@ -159,6 +154,6 @@
     </div>
 
     <!-- Application Script -->
-    <script src="app.js" defer></script>
+    <script src="app.js?v=1.1" defer></script>
 </body>
 </html>
