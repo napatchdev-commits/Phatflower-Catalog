@@ -238,9 +238,7 @@ function renderCatalog() {
                 </div>
                 <div class="item-details">
                     <h3 class="item-title">${item.description}</h3>
-                    <div class="item-price" style="display: none;">
-                        ${item.unitPrice > 0 ? `${formatCurrency(item.unitPrice)} <span>บาท</span>` : `<span>สอบถามราคา (ประเมินตามหน้างาน)</span>`}
-                    </div>
+
                     <button class="btn-add" onclick="addToPackage('${item.id}')">
                         <i class="fa-solid fa-plus"></i> เพิ่มในแพ็กเกจ
                     </button>
@@ -367,7 +365,6 @@ function updateSummary() {
             <div class="cart-item">
                 <div class="cart-item-info">
                     <div class="cart-item-title">${entry.item.description}</div>
-                    <div class="cart-item-price" style="display: none;">${priceDisplay}</div>
                 </div>
                 <div class="cart-item-controls">
                     <button class="qty-btn" onclick="removeFromPackage('${entry.item.id}')">-</button>
