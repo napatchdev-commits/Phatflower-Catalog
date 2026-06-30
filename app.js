@@ -83,8 +83,8 @@ async function loadCatalog() {
         const data = await response.json();
         
         if (data && data.status === 'success' && data.result) {
-            // Filter catalog to show only wedding items (exclude eventType === 'ordination')
-            state.catalog = (data.result.catalog || []).filter(item => item !== null && item.eventType !== 'ordination');
+            // Filter catalog to show only wedding items (exclude eventType === 'ordination') and showOnCatalog !== false
+            state.catalog = (data.result.catalog || []).filter(item => item !== null && item.eventType !== 'ordination' && item.showOnCatalog !== false);
             
             // Filter packages to show only wedding packages safely
             const fetchedPkgs = (data.result.packages || []).filter(item => item !== null);
