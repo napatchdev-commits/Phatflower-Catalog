@@ -29,7 +29,8 @@ const state = {
     packages: [],
     promotions: [],
     selectedItems: {}, // key: itemId, value: { item: Object, qty: Number }
-    activeCategory: 'all'
+    activeCategory: 'all',
+    manychatUserId: ''
 };
 
 // Map keywords to category and icons for rich visualization
@@ -474,7 +475,8 @@ async function submitQuoteRequest(event) {
             notes: notes,
             items: items,
             totalPrice: totalPrice,
-            isInquiry: true // Flag to distinguish interest inquiries in backend
+            isInquiry: true, // Flag to distinguish interest inquiries in backend
+            manychatUserId: state.manychatUserId || ''
         }
     };
     
@@ -532,7 +534,6 @@ async function submitQuoteRequest(event) {
 // Render Success Screen inside Modal Content
 function renderSuccessScreen(requestId, name, total) {
     const modalContent = document.querySelector('#request-modal .modal-content');
-    const formattedTotal = total > 0 ? `${formatCurrency(total)} บาท` : 'ประเมินราคาตามหน้างาน';
     modalContent.innerHTML = `
         <div class="modal-header">
             <span class="modal-title">ส่งข้อมูลสำเร็จ!</span>
@@ -542,29 +543,28 @@ function renderSuccessScreen(requestId, name, total) {
             <div class="success-icon-wrapper" style="width: 60px; height: 60px; border-radius: 50%; background-color: rgba(45, 106, 79, 0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 4px;">
                 <i class="fa-solid fa-circle-check" style="font-size: 2.2rem; color: var(--primary);"></i>
             </div>
-            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--dark); margin: 0;">คำนวณราคาประเมินเสร็จสิ้น</h3>
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--dark); margin: 0;">บันทึกข้อมูลเรียบร้อยแล้ว</h3>
             <p style="font-size: 0.88rem; color: var(--gray-400); line-height: 1.5; margin: 0; padding: 0 10px;">
-                ระบบได้ส่งข้อมูลความสนใจจัดงานของคุณไปยังพนักงานเรียบร้อยแล้ว และนี่คือใบเสนอราคาประเมินเบื้องต้นของคุณ:
+                ระบบได้บันทึกรายการสินค้าและแพ็กเกจที่คุณจัดเรียบร้อยแล้วค่ะ รายละเอียดรายการจัดดอกไม้และใบเสนอราคาเบื้องต้นจะถูกส่งกลับเข้าไปในแชทข้อความเพจของคุณโดยเร็วที่สุดค่ะ
             </p>
             
-            <!-- Beautiful Receipt Card -->
+            <!-- Beautiful Info Card (No Price) -->
             <div class="quote-receipt-card" style="width: 100%; background: var(--gray-50); border: 1.5px dashed var(--gray-200); border-radius: 12px; padding: 18px; text-align: left; display: flex; flex-direction: column; gap: 12px; box-sizing: border-box;">
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--gray-200); padding-bottom: 8px;">
-                    <span style="font-size: 0.8rem; color: var(--gray-400); font-weight: 500;">รหัสอ้างอิงใบเสนอราคา</span>
+                    <span style="font-size: 0.8rem; color: var(--gray-400); font-weight: 500;">รหัสอ้างอิง</span>
                     <span style="font-size: 0.85rem; color: var(--dark); font-weight: 600; font-family: monospace;">${requestId}</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span style="font-size: 0.85rem; color: var(--gray-400);">ชื่อลูกค้า</span>
                     <span style="font-size: 0.88rem; color: var(--dark); font-weight: 600;">คุณ${name}</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed var(--gray-200); padding-top: 10px; margin-top: 4px;">
-                    <span style="font-size: 0.9rem; color: var(--dark); font-weight: 600;">ราคาประเมินอัตโนมัติ</span>
-                    <span style="font-size: 1.25rem; color: var(--primary); font-weight: 700;">${formattedTotal}</span>
+                <div style="border-top: 1px dashed var(--gray-200); padding-top: 10px; margin-top: 4px; text-align: center;">
+                    <span style="font-size: 0.8rem; color: var(--primary); font-weight: 600;"><i class="fa-brands fa-facebook-messenger"></i> ระบบกำลังส่งใบประเมินราคาและรายละเอียดเข้าแชทเพจ</span>
                 </div>
             </div>
             
             <p style="font-size: 0.82rem; color: var(--primary); font-weight: 500; line-height: 1.45; margin: 0; background-color: rgba(45, 106, 79, 0.05); padding: 8px 16px; border-radius: 8px; width: 100%; box-sizing: border-box;">
-                <i class="fa-solid fa-circle-info" style="margin-right: 6px;"></i> พนักงานจะติดต่อกลับทางโทรศัพท์เพื่อยืนยันวันจัดงาน รายละเอียด ดอกไม้ และคิวงานอีกครั้งค่ะ
+                <i class="fa-solid fa-circle-info" style="margin-right: 6px;"></i> เจ้าหน้าที่จะติดต่อกลับทางโทรศัพท์ หรือ ส่งข้อความแชทเพื่อยืนยันวันจัดงาน ดอกไม้ และคิวงานอีกครั้งค่ะ
             </p>
             
             <button class="btn-primary" onclick="closeSuccessAndReload()" style="width: 100%; padding: 12px 16px; font-size: 0.95rem; border-radius: 8px; margin-top: 4px; box-sizing: border-box;">
@@ -631,6 +631,10 @@ function toggleMobileDrawer(show) {
 
 // Initialize Application
 document.addEventListener('DOMContentLoaded', () => {
+    // Extract ManyChat User ID from URL query parameters (supports uid, mc_id, manychat_id)
+    const urlParams = new URLSearchParams(window.location.search);
+    state.manychatUserId = urlParams.get('uid') || urlParams.get('mc_id') || urlParams.get('manychat_id') || '';
+
     loadCatalog();
     
     // Bind overlay click to close mobile drawer
