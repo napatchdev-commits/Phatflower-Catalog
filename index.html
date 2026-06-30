@@ -123,27 +123,27 @@
                 <span class="modal-title">กรอกข้อมูลความสนใจจัดงาน</span>
                 <button class="close-modal-btn" onclick="toggleRequestModal(false)"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <form id="quote-request-form" onsubmit="submitQuoteRequest(event)">
+            <form id="quote-request-form" onsubmit="submitQuoteRequest(event)" autocomplete="off">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="req-name">ชื่อ - นามสกุล ผู้ติดต่อ *</label>
-                        <input type="text" id="req-name" required placeholder="เช่น คุณสมชาย รักดี">
+                        <input type="text" id="req-name" required placeholder="เช่น คุณสมชาย รักดี" autocomplete="off">
                     </div>
                     <div class="form-group">
                         <label for="req-phone">เบอร์โทรศัพท์ติดต่อกลับ (ถ้ามี)</label>
-                        <input type="tel" id="req-phone" pattern="[0-9]{9,10}" placeholder="เช่น 0891234567">
+                        <input type="tel" id="req-phone" pattern="[0-9]{9,10}" placeholder="เช่น 0891234567" autocomplete="off">
                     </div>
                     <div class="form-group">
                         <label for="req-date">วันที่จัดงาน (ถ้ามี)</label>
-                        <input type="date" id="req-date">
+                        <input type="date" id="req-date" autocomplete="off">
                     </div>
                     <div class="form-group">
                         <label for="req-location">สถานที่จัดงาน / ที่อยู่จัดงาน *</label>
-                        <textarea id="req-location" required placeholder="กรอกข้อมูลสถานที่จัดงาน เช่น โรงแรมกรุงเทพ แกรนด์ ฮอลล์ ชั้น 2"></textarea>
+                        <textarea id="req-location" required placeholder="กรอกข้อมูลสถานที่จัดงาน เช่น โรงแรมกรุงเทพ แกรนด์ ฮอลล์ ชั้น 2" autocomplete="off"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="req-notes">หมายเหตุเพิ่มเติม (ถ้ามี)</label>
-                        <textarea id="req-notes" placeholder="ระบุรายละเอียด ดีไซน์ หรือเฉดสีดอกไม้ที่ต้องการเน้น เช่น โทนพาสเทล ชมพู-ขาว"></textarea>
+                        <textarea id="req-notes" placeholder="ระบุรายละเอียด ดีไซน์ หรือเฉดสีดอกไม้ที่ต้องการเน้น เช่น โทนพาสเทล ชมพู-ขาว" autocomplete="off"></textarea>
                     </div>
                     <button type="submit" class="btn-primary" id="btn-submit-request" style="margin-top: 10px;">
                         <i class="fa-regular fa-paper-plane"></i> ส่งข้อมูลความสนใจให้พนักงาน
