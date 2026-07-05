@@ -1,4 +1,4 @@
-// PhatFlowers Interactive Catalog - Client Application Logic
+﻿// PhatFlowers Interactive Catalog - Client Application Logic
 
 const GOOGLE_SHEETS_DATABASE_URL = "https://script.google.com/macros/s/AKfycbxl8B41auvkj7uOhgbK2IBnIWlzfpGmz8Q45VqLlS56Oy9cmcq2VIfL2Ch_6_E-UbVy/exec";
 
@@ -28,6 +28,7 @@ const state = {
     catalog: [],
     packages: [],
     promotions: [],
+    gallery: [],
     selectedItems: {}, // key: itemId, value: { item: Object, qty: Number }
     activeCategory: 'all',
     manychatUserId: ''
@@ -116,24 +117,29 @@ async function loadCatalog() {
             });
             state.promotions = weddingPromos.length > 0 ? weddingPromos : DEFAULT_PROMOTIONS;
             
+            state.gallery = data.result.gallery || [];
             console.log("Loaded dynamic database from Google Sheets filtered for Wedding.");
         } else {
             console.warn("API returned invalid data, using default structures:", data);
             state.catalog = DEFAULT_CATALOG;
             state.packages = DEFAULT_PACKAGES;
             state.promotions = DEFAULT_PROMOTIONS;
+        state.gallery = [];
+            state.gallery = [];
         }
     } catch (error) {
         console.error("Failed to fetch database from API, using defaults:", error);
         state.catalog = DEFAULT_CATALOG;
         state.packages = DEFAULT_PACKAGES;
         state.promotions = DEFAULT_PROMOTIONS;
+        state.gallery = [];
     }
 
     renderFilterButtons();
     renderCatalog();
     renderPromotions();
     renderPackages();
+    initClientGallery();
 }
 
 // Render dynamic filter buttons based on what categories exist in catalog
@@ -155,6 +161,15 @@ function renderFilterButtons() {
     }
     if (state.packages && state.packages.length > 0) {
         html += `<button class="category-btn highlight-btn-pkg" onclick="scrollToSection('packages-section-wrapper')"><i class="fa-solid fa-cubes"></i> แพ็กเกจจัดงาน</button>`;
+        if (state.gallery && state.gallery.length > 0) {
+            const hasWedding = state.gallery.some(item => {
+                const itemType = item.eventType || (item.category === "ordination" ? "ordination" : "wedding");
+                return itemType === "wedding";
+            });
+            if (hasWedding) {
+                html += `<button class="category-btn highlight-btn-gallery" onclick="scrollToSection('gallery-section-wrapper')"><i class="fa-solid fa-images"></i> เนเธเธฅเธฅเธญเธฃเธตเธเธฅเธเธฒเธ</button>`;
+            }
+        }
     }
     
     html += `<button class="category-btn active" onclick="setCategory('all')">ทั้งหมด</button>`;
@@ -722,4 +737,100 @@ function renderPackages() {
     }).join('');
 
     wrapper.style.display = 'block';
+}
+
+
+/* ==========================================================================
+   CLIENT PORTFOLIO GALLERY LOGIC (WEDDING)
+   ========================================================================== */
+function initClientGallery() {
+    const wrapper = document.getElementById("gallery-section-wrapper");
+    if (!wrapper) return;
+    
+    wrapper.style.display = "block";
+    closeGalleryCategoryView(); // Show categories selection screen first
+}
+
+function showGalleryCategory(category) {
+    const selectionView = document.getElementById("gallery-categories-selection");
+    const imagesView = document.getElementById("gallery-category-images-view");
+    const titleEl = document.getElementById("gallery-category-title");
+    const container = document.getElementById("gallery-container");
+    
+    if (!selectionView || !imagesView || !titleEl || !container) return;
+    
+    // Set title
+    titleEl.textContent = `ผลงานจัดดอกไม้ - ${category}`;
+    
+    // Render images
+    container.innerHTML = "";
+    const filtered = state.gallery.filter(item => {
+        const itemType = item.eventType || (item.category === "ordination" ? "ordination" : "wedding");
+        return itemType === "wedding" && item.category === category;
+    });
+    
+    if (filtered.length === 0) {
+        container.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 30px; color: var(--text-secondary); width: 100%;">
+                <i class="fa-solid fa-images" style="font-size: 2.5rem; margin-bottom: 10px; color: var(--gray-300);"></i>
+                <p>ขออภัย ยังไม่มีภาพผลงานอัปโหลดในหมวดหมู่นี้</p>
+            </div>
+        `;
+    } else {
+        filtered.forEach(item => {
+            const div = document.createElement("div");
+            div.className = "gallery-item";
+            div.style.cssText = "border-radius: 8px; overflow: hidden; position: relative; padding-top: 100%; cursor: pointer; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);";
+            div.onclick = () => openLightbox(item.imageUrl);
+            
+            div.innerHTML = `
+                <img src="${item.imageUrl}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;">
+                <div class="gallery-item-hover" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); opacity: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.5rem; transition: opacity 0.3s;">
+                    <i class="fa-solid fa-magnifying-glass-plus"></i>
+                </div>
+            `;
+            
+            // Add CSS hover style for zoom effect
+            div.addEventListener("mouseenter", () => {
+                div.querySelector("img").style.transform = "scale(1.08)";
+                div.querySelector(".gallery-item-hover").style.opacity = "1";
+            });
+            div.addEventListener("mouseleave", () => {
+                div.querySelector("img").style.transform = "scale(1)";
+                div.querySelector(".gallery-item-hover").style.opacity = "0";
+            });
+            
+            container.appendChild(div);
+        });
+    }
+    
+    // Toggle screens
+    selectionView.style.display = "none";
+    imagesView.style.display = "block";
+}
+
+function closeGalleryCategoryView() {
+    const selectionView = document.getElementById("gallery-categories-selection");
+    const imagesView = document.getElementById("gallery-category-images-view");
+    
+    if (!selectionView || !imagesView) return;
+    
+    selectionView.style.display = "grid";
+    imagesView.style.display = "none";
+}
+
+function openLightbox(src) {
+    const lightbox = document.getElementById("gallery-lightbox");
+    const img = document.getElementById("lightbox-img");
+    if (!lightbox || !img) return;
+    
+    img.src = src;
+    lightbox.classList.add("active");
+}
+
+function closeLightbox() {
+    const lightbox = document.getElementById("gallery-lightbox");
+    if (lightbox) {
+        lightbox.classList.remove("active");
+    }
 }

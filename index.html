@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
@@ -54,6 +54,80 @@
                     <!-- Rendered dynamically from app.js -->
                 </div>
             </div>
+
+
+            <!-- SECTION: Gallery (ผลงานของเราแยกตามหมวดหมู่) -->
+            <div id="gallery-section-wrapper" style="display: none; margin-bottom: 40px;">
+                <div class="section-title">
+                    <i class="fa-solid fa-images"></i>
+                    <span>ผลงานจัดดอกไม้ของเรา (Our Portfolio Gallery)</span>
+                </div>
+                
+                <!-- Category Cards Selection View -->
+                <div id="gallery-categories-selection" class="gallery-cats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <!-- Card 1 -->
+                    <div class="gallery-cat-card" onclick="showGalleryCategory('พิธีสงฆ์')">
+                        <i class="fa-solid fa-dharmachakra"></i>
+                        <h3>พิธีสงฆ์</h3>
+                        <p>คลิกดูรูปผลงานพิธีสงฆ์</p>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="gallery-cat-card" onclick="showGalleryCategory('ฉากพิธีรับไหว้/สวมแหวน/หลั่งน้ำสังข์')">
+                        <i class="fa-solid fa-hands-praying"></i>
+                        <h3>ฉากพิธีรับไหว้/สวมแหวน/หลั่งน้ำสังข์</h3>
+                        <p>คลิกดูรูปผลงานฉากรับไหว้หลั่งน้ำสังข์</p>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="gallery-cat-card" onclick="showGalleryCategory('ฉากงานเลี้ยง')">
+                        <i class="fa-solid fa-utensils"></i>
+                        <h3>ฉากงานเลี้ยง</h3>
+                        <p>คลิกดูรูปผลงานฉากงานเลี้ยงฉลอง</p>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="gallery-cat-card" onclick="showGalleryCategory('โต๊ะลงทะเบียน')">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <h3>โต๊ะลงทะเบียน</h3>
+                        <p>คลิกดูรูปผลงานโต๊ะลงทะเบียน</p>
+                    </div>
+                    <!-- Card 5 -->
+                    <div class="gallery-cat-card" onclick="showGalleryCategory('ฉากเวที')">
+                        <i class="fa-solid fa-person-shelter"></i>
+                        <h3>ฉากเวที</h3>
+                        <p>คลิกดูรูปผลงานฉากเวทีหลัก</p>
+                    </div>
+                    <!-- Card 6 -->
+                    <div class="gallery-cat-card" onclick="showGalleryCategory('มุมแกลอรี่')">
+                        <i class="fa-solid fa-images"></i>
+                        <h3>มุมแกลอรี่</h3>
+                        <p>คลิกดูรูปผลงานมุมแกลอรี่รูปคู่</p>
+                    </div>
+                    <!-- Card 7 -->
+                    <div class="gallery-cat-card" onclick="showGalleryCategory('ฉากรับปริญญา')">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <h3>ฉากรับปริญญา</h3>
+                        <p>คลิกดูรูปผลงานฉากรับปริญญา</p>
+                    </div>
+                    <!-- Card 8 -->
+                    <div class="gallery-cat-card" onclick="showGalleryCategory('ฉากถ่ายรูปอื่นๆ')">
+                        <i class="fa-solid fa-camera"></i>
+                        <h3>ฉากถ่ายรูปอื่นๆ</h3>
+                        <p>คลิกดูรูปผลงานฉากถ่ายรูปอื่นๆ</p>
+                    </div>
+                </div>
+                
+                <!-- Category Images List View (Hidden initially) -->
+                <div id="gallery-category-images-view" style="display: none; background: #fff; padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-top: 15px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3 id="gallery-category-title" style="margin: 0;"></h3>
+                        <button class="gallery-back-btn" onclick="closeGalleryCategoryView()"><i class="fa-solid fa-arrow-left"></i> ย้อนกลับ</button>
+                    </div>
+                    
+                    <div class="gallery-grid" id="gallery-container">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+            </div>
+
 
             <div class="section-title">
                 <i class="fa-solid fa-wand-magic-sparkles"></i>
@@ -151,6 +225,12 @@
                 </div>
             </form>
         </div>
+    </div>
+
+    <!-- Lightbox Modal for Gallery Images -->
+    <div class="lightbox" id="gallery-lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-content" id="lightbox-img">
     </div>
 
     <!-- Application Script -->
