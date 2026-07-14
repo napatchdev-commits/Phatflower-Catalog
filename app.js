@@ -1,4 +1,4 @@
-﻿// PhatFlowers Interactive Catalog - Client Application Logic
+// PhatFlowers Interactive Catalog - Client Application Logic
 
 const GOOGLE_SHEETS_DATABASE_URL = "https://script.google.com/macros/s/AKfycbxl8B41auvkj7uOhgbK2IBnIWlzfpGmz8Q45VqLlS56Oy9cmcq2VIfL2Ch_6_E-UbVy/exec";
 
@@ -817,6 +817,11 @@ function closeGalleryCategoryView() {
     
     selectionView.style.display = "grid";
     imagesView.style.display = "none";
+    
+    const wrapper = document.getElementById("gallery-section-wrapper");
+    if (wrapper) {
+        wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 }
 
 function openLightbox(src) {
